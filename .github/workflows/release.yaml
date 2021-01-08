@@ -27,7 +27,7 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: "whyeasy/atlasdb-performance-advisor:${{ github.ref }}"
+          image-ref: "whyeasy/atlasdb-performance-advisor:latest"
           format: "table"
           exit-code: "1"
           severity: "CRITICAL,HIGH"
