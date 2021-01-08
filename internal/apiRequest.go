@@ -55,11 +55,12 @@ type suggestedIndexes struct {
 	} `json:"suggestedIndexes"`
 }
 
-func GetData(groupId string, projectId string, publicKey string, privateKey string, since int) {
+//GetData retrieves the data from AtlasDB and sends them to stdout.
+func GetData(groupID string, projectID string, publicKey string, privateKey string, since int) {
 
 	time := time.Now().Add(time.Duration(-since)*time.Hour).UnixNano() / 1000000
 
-	connectionString := fmt.Sprintf("https://cloud.mongodb.com/api/atlas/v1.0/groups/%s/processes/%s/performanceAdvisor/", groupId, projectId)
+	connectionString := fmt.Sprintf("https://cloud.mongodb.com/api/atlas/v1.0/groups/%s/processes/%s/performanceAdvisor/", groupID, projectID)
 
 	getSlowQueries(connectionString, publicKey, privateKey, time)
 	getSuggestedIndexes(connectionString, publicKey, privateKey, time)
@@ -76,6 +77,9 @@ func getSlowQueries(connection string, publicKey string, privateKey string, time
 
 	var responses slowQueries
 	err = json.Unmarshal(resp, &responses)
+	if err != nil {
+		log.Error(err)
+	}
 
 	for _, response := range responses.SlowQueries {
 		namespace := strings.Split(response.Namespace, ".")
@@ -98,6 +102,9 @@ func getSuggestedIndexes(connection string, publicKey string, privateKey string,
 
 	var responses suggestedIndexes
 	err = json.Unmarshal(resp, &responses)
+	if err != nil {
+		log.Error(err)
+	}
 
 	log.Info(len(responses.Shapes))
 	log.Info(len(responses.SuggestedIndexes))
