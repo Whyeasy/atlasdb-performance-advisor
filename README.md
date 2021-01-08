@@ -1,6 +1,6 @@
-![build](https://github.com/Whyeasy/zally-cleaner/workflows/build/badge.svg)
-![status-badge](https://goreportcard.com/badge/github.com/Whyeasy/zally-cleaner)
-![Github go.mod Go version](https://img.shields.io/github/go-mod/go-version/Whyeasy/zally-cleaner)
+![build](https://github.com/Whyeasy/atlasdb-performance-advisor/workflows/build/badge.svg)
+![status-badge](https://goreportcard.com/badge/github.com/Whyeasy/atlasdb-performance-advisor)
+![Github go.mod Go version](https://img.shields.io/github/go-mod/go-version/Whyeasy/atlasdb-performance-advisor)
 
 # atlasdb-slow-queries
 
