@@ -1,5 +1,5 @@
 build:
-	go build -o bin/atlas-performance-advisor ./cmd/atlas-performance-advisor
+	go build -o bin/atlasdb-performance-advisor ./cmd/atlasdb-performance-advisor
 
 deps:
 	go mod verify
@@ -14,7 +14,7 @@ untag:
 	git fetch --tags
 	git tag -d $(TAG)
 	git push origin :refs/tags/$(TAG)
-	curl --request DELETE --header "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/whyeasy/atlas-performance-advisor/releases/:release_id/$(TAG)"
+	curl --request DELETE --header "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/whyeasy/atlasdb-performance-advisor/releases/:release_id/$(TAG)"
 
 verify-goreleaser:
 ifeq (, $(shell which goreleaser))
