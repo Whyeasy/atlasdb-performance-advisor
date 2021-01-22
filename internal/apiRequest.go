@@ -106,11 +106,18 @@ func getSuggestedIndexes(connection string, publicKey string, privateKey string,
 		log.Error(err)
 	}
 
-	log.Info(len(responses.Shapes))
-	log.Info(len(responses.SuggestedIndexes))
-
 	for _, response := range responses.SuggestedIndexes {
 		namespace := strings.Split(response.Namespace, ".")
+
+		indexes := ""
+		for _, v := range response.Index {
+			i, err := json.Marshal(v)
+			if err != nil {
+				log.Error(err)
+			}
+
+			indexes += string(i)
+		}
 
 		for _, impact := range response.Impact {
 			for _, shape := range responses.Shapes {
@@ -118,13 +125,13 @@ func getSuggestedIndexes(connection string, publicKey string, privateKey string,
 					log.WithFields(log.Fields{
 						"id":                response.ID,
 						"impact":            impact,
-						"index":             response.Index,
+						"index":             indexes,
 						"database":          namespace[0],
 						"collection":        namespace[1],
 						"weight":            response.Weight,
 						"avgMs":             shape.AvgMs,
 						"count":             shape.Count,
-						"inefficenceyScore": shape.InefficiencyScore,
+						"inefficiencyScore": shape.InefficiencyScore,
 					}).Info("Suggested index found.")
 				}
 			}
