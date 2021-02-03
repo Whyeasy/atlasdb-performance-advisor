@@ -10,8 +10,6 @@ A Go program which queries the AtlasDB API to retrieve and log slow queries and 
 
 Provide the Group ID, which is the Project ID within AtlasDB: `--groupId` or as env variable `GROUP_ID`.
 
-Provide the Project ID, which is the connection string and the port number: `--projectId` or as env variable `PROJECT_ID`.
-
 Provide the Public Key of the created API key within AtlasDB: `--publicKey` or as env variable `PUBLIC_KEY`.
 
 Provide the Private Key of the created API key within AtlasDB: `--privateKey` or as env variable `PRIVATE_KEY`.

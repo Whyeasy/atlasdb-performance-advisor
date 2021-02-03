@@ -12,6 +12,13 @@ import (
 	dac "github.com/xinsnake/go-http-digest-auth-client"
 )
 
+type mongoProjectId struct {
+	Results []struct {
+		ID       string `json:"id"`
+		TypeName string `json:"typeName"`
+	} `json:"results"`
+}
+
 type slowQueries struct {
 	SlowQueries []struct {
 		Line      string `json:"line"`
@@ -56,14 +63,43 @@ type suggestedIndexes struct {
 }
 
 //GetData retrieves the data from AtlasDB and sends them to stdout.
-func GetData(groupID string, projectID string, publicKey string, privateKey string, since int) {
+func GetData(groupID string, publicKey string, privateKey string, since int) {
 
 	time := time.Now().Add(time.Duration(-since)*time.Hour).UnixNano() / 1000000
 
-	connectionString := fmt.Sprintf("https://cloud.mongodb.com/api/atlas/v1.0/groups/%s/processes/%s/performanceAdvisor/", groupID, projectID)
+	primary, err := getPrimary(groupID, publicKey, privateKey)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	connectionString := fmt.Sprintf("https://cloud.mongodb.com/api/atlas/v1.0/groups/%s/processes/%s/performanceAdvisor/", groupID, primary)
 
 	getSlowQueries(connectionString, publicKey, privateKey, time)
 	getSuggestedIndexes(connectionString, publicKey, privateKey, time)
+}
+
+func getPrimary(groupID string, publicKey string, privateKey string) (string, error) {
+
+	request := fmt.Sprintf("https://cloud.mongodb.com/api/atlas/v1.0/groups/%s/processes/", groupID)
+
+	resp, err := doRequest(request, publicKey, privateKey)
+	if err != nil {
+		return "", err
+	}
+
+	var responses mongoProjectId
+	err = json.Unmarshal(resp, &responses)
+	if err != nil {
+		return "", err
+	}
+
+	for _, response := range responses.Results {
+		if strings.Contains(strings.ToLower(response.TypeName), "primary") {
+			log.Debug("Primary database found: ", response.ID)
+			return response.ID, nil
+		}
+	}
+	return "", fmt.Errorf("No Primary Database found")
 }
 
 func getSlowQueries(connection string, publicKey string, privateKey string, time int64) {
