@@ -12,7 +12,7 @@ import (
 	dac "github.com/xinsnake/go-http-digest-auth-client"
 )
 
-type mongoProjectId struct {
+type mongoProjectID struct {
 	Results []struct {
 		ID       string `json:"id"`
 		TypeName string `json:"typeName"`
