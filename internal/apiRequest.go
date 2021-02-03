@@ -87,7 +87,7 @@ func getPrimary(groupID string, publicKey string, privateKey string) (string, er
 		return "", err
 	}
 
-	var responses mongoProjectId
+	var responses mongoProjectID
 	err = json.Unmarshal(resp, &responses)
 	if err != nil {
 		return "", err
