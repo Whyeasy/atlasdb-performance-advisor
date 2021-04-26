@@ -178,6 +178,9 @@ func getSuggestedIndexes(connection string, publicKey string, privateKey string,
 func doRequest(uri string, publicKey string, privateKey string) ([]byte, error) {
 
 	t := dac.NewTransport(publicKey, privateKey)
+	t.HTTPClient = &http.Client{
+		Timeout: time.Second * 60,
+	}
 
 	req, err := http.NewRequest(
 		"GET",
