@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@main
       - name: Lint
-        uses: actions-contrib/golangci-lint@v1
+        uses: golangci/golangci-lint-action@v2
         with:
           args: run -E golint -E bodyclose
   build:
